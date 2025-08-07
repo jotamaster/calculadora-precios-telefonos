@@ -1,46 +1,129 @@
-# Getting Started with Create React App
+# Calculadora de Precios de Teléfonos
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Una aplicación web moderna para ayudar a promotores de telefonía celular a calcular precios finales de teléfonos basándose en descuentos por operador.
 
-## Available Scripts
+## 🚀 Características
 
-In the project directory, you can run:
+- **Carga de archivos Excel**: Sube archivos Excel con datos de promociones
+- **Vista de modelos**: Lista todos los modelos de teléfonos disponibles
+- **Búsqueda**: Filtra modelos por nombre
+- **Vistas múltiples**: Modo lista y modo tarjetas
+- **Calculadora de precios**: Calcula precios finales automáticamente
+- **Interfaz moderna**: Diseño responsive con Tailwind CSS
 
-### `npm start`
+## 📋 Requisitos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Node.js 14 o superior
+- npm o yarn
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🛠️ Instalación
 
-### `npm test`
+1. **Clona el repositorio**:
+   ```bash
+   git clone <url-del-repositorio>
+   cd irumi-app
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. **Instala las dependencias**:
+   ```bash
+   npm install
+   ```
 
-### `npm run build`
+3. **Inicia el servidor de desarrollo**:
+   ```bash
+   npm start
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **Abre tu navegador**:
+   La aplicación estará disponible en `http://localhost:3000`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📊 Formato del Archivo Excel
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+El archivo Excel debe contener las siguientes columnas:
 
-### `npm run eject`
+| Columna | Descripción | Ejemplo |
+|---------|-------------|---------|
+| INICIO | Fecha de inicio de la promoción | 1-ago |
+| FIN | Fecha de fin de la promoción | 31-ago |
+| OPERADOR | Nombre del operador | WOM, CLARO, ENTEL |
+| SKU PLAN | Código SKU del plan | 225005999 |
+| DESCRIPCION PLAN | Descripción del plan | PLAN MSM HONOR 400 512 WOM |
+| DTO. | Descuento en dinero | 180.000 |
+| MARCA | Marca del teléfono | HONOR |
+| EQUIPO | Modelo del teléfono | HONOR 400 512GB |
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 🎯 Cómo Usar
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. Cargar Datos
+- Al abrir la aplicación, verás la pantalla de carga
+- Haz clic en "Seleccionar archivo" y elige tu archivo Excel
+- La aplicación procesará automáticamente los datos
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 2. Explorar Modelos
+- Una vez cargados los datos, verás la lista de modelos
+- Usa la barra de búsqueda para filtrar modelos
+- Cambia entre vista de lista y tarjetas con los botones
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 3. Calcular Precios
+- Haz clic en cualquier modelo para ver su detalle
+- Ingresa el precio base del teléfono
+- Selecciona un operador de la lista
+- El precio final se calculará automáticamente
 
-## Learn More
+## 🏗️ Estructura del Proyecto
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+src/
+├── components/
+│   ├── App.tsx              # Componente principal
+│   ├── ExcelUploader.tsx    # Carga de archivos Excel
+│   ├── PhoneList.tsx        # Lista de modelos
+│   └── PhoneDetail.tsx      # Detalle y calculadora
+├── context/
+│   └── DataContext.tsx      # Estado global de la aplicación
+├── types/
+│   └── index.ts             # Definiciones de tipos TypeScript
+└── index.css                # Estilos globales
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🛠️ Tecnologías Utilizadas
+
+- **React 18**: Framework de JavaScript
+- **TypeScript**: Tipado estático
+- **Tailwind CSS**: Framework de CSS
+- **React Router**: Navegación
+- **XLSX**: Procesamiento de archivos Excel
+- **Lucide React**: Iconos
+
+## 📝 Scripts Disponibles
+
+- `npm start`: Inicia el servidor de desarrollo
+- `npm run build`: Construye la aplicación para producción
+- `npm test`: Ejecuta las pruebas
+- `npm run eject`: Expone la configuración de webpack
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## 🆘 Soporte
+
+Si tienes problemas o preguntas:
+
+1. Revisa la documentación
+2. Busca en los issues existentes
+3. Crea un nuevo issue con detalles del problema
+
+## 🎉 Agradecimientos
+
+- React Team por el framework
+- Tailwind CSS por los estilos
+- La comunidad de desarrolladores por las librerías utilizadas
