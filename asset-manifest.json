@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/calculadora-precios-telefonos/static/css/main.eb7a1a95.css",
+    "main.js": "/calculadora-precios-telefonos/static/js/main.972174c9.js",
+    "static/js/453.05b85581.chunk.js": "/calculadora-precios-telefonos/static/js/453.05b85581.chunk.js",
+    "index.html": "/calculadora-precios-telefonos/index.html",
+    "main.eb7a1a95.css.map": "/calculadora-precios-telefonos/static/css/main.eb7a1a95.css.map",
+    "main.972174c9.js.map": "/calculadora-precios-telefonos/static/js/main.972174c9.js.map",
+    "453.05b85581.chunk.js.map": "/calculadora-precios-telefonos/static/js/453.05b85581.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eb7a1a95.css",
+    "static/js/main.972174c9.js"
+  ]
+}
