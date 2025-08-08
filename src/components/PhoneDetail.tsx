@@ -13,6 +13,21 @@ const PhoneDetail: React.FC = () => {
   const [selectedOperator, setSelectedOperator] = useState<Operator | null>(null);
   const [finalPrice, setFinalPrice] = useState<number | null>(null);
 
+  // Function to get company colors
+  const getCompanyColors = (companyName: string) => {
+    const normalizedName = companyName.toUpperCase();
+    switch (normalizedName) {
+      case 'CLARO':
+        return { bg: '#da291c', text: 'white' };
+      case 'ENTEL':
+        return { bg: '#002eff', text: 'white' };
+      case 'WOM':
+        return { bg: '#4d008c', text: 'white' };
+      default:
+        return { bg: '#6b7280', text: 'white' };
+    }
+  };
+
   const phone = phoneModels.find(p => p.name === decodeURIComponent(phoneName || ''));
 
   useEffect(() => {
@@ -52,7 +67,7 @@ const PhoneDetail: React.FC = () => {
       <div className="mb-8">
         <button
           onClick={() => navigate('/')}
-          className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
+          className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4 mt-8"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Volver a la lista
@@ -65,7 +80,7 @@ const PhoneDetail: React.FC = () => {
           </h1>
         </div>
         <p className="text-gray-600 mt-2">
-          {phone.operators.length} operador{phone.operators.length !== 1 ? 'es' : ''} disponible{phone.operators.length !== 1 ? 's' : ''}
+          {phone.operators.length} compañía{phone.operators.length !== 1 ? 's' : ''} disponible{phone.operators.length !== 1 ? 's' : ''}
         </p>
       </div>
 
@@ -118,7 +133,7 @@ const PhoneDetail: React.FC = () => {
             {/* Operator Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Seleccionar Operador
+                Selecciona compañía
               </label>
               <select
                 value={selectedOperator?.name || ''}
@@ -128,7 +143,7 @@ const PhoneDetail: React.FC = () => {
                 }}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Selecciona un operador</option>
+                <option value="">Selecciona una compañía</option>
                 {phone.operators.map((operator, index) => (
                                      <option key={index} value={operator.name}>
                      {operator.name} - Descuento: {new Intl.NumberFormat('es-CL', {
@@ -184,7 +199,7 @@ const PhoneDetail: React.FC = () => {
         {/* Operator Details */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Detalles de Operadores
+            Detalles de Compañías
           </h2>
           
           <div className="space-y-4">
@@ -199,17 +214,27 @@ const PhoneDetail: React.FC = () => {
                 onClick={() => setSelectedOperator(operator)}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-gray-900">
-                    {operator.name}
-                  </h3>
-                                     <span className="text-lg font-bold text-blue-600">
-                     -{new Intl.NumberFormat('es-CL', {
-                       style: 'currency',
-                       currency: 'CLP',
-                       minimumFractionDigits: 0,
-                       maximumFractionDigits: 0
-                     }).format(operator.discount)}
-                   </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
+                      style={{
+                        backgroundColor: getCompanyColors(operator.name).bg
+                      }}
+                    >
+                      {operator.name}
+                    </span>
+                    <h3 className="font-semibold text-gray-900">
+                      {operator.name}
+                    </h3>
+                  </div>
+                  <span className="text-lg font-bold text-blue-600">
+                    -{new Intl.NumberFormat('es-CL', {
+                      style: 'currency',
+                      currency: 'CLP',
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0
+                    }).format(operator.discount)}
+                  </span>
                 </div>
                 
                 <p className="text-sm text-gray-600 mb-2">

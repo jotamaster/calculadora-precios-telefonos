@@ -132,7 +132,7 @@ const ExcelUploader: React.FC = () => {
         <div className="text-center mb-6">
           <FileSpreadsheet className="mx-auto h-12 w-12 text-blue-600 mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Cargar Datos de Teléfonos
+            Carga el Excel MSM
           </h2>
           <p className="text-gray-600">
             Sube tu archivo Excel con los datos de promociones

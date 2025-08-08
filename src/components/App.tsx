@@ -16,7 +16,7 @@ const AppContent: React.FC = () => {
           <div className="text-center mb-8">
             <Smartphone className="mx-auto h-16 w-16 text-blue-600 mb-4" />
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Calculadora de Precios de Teléfonos
+              Calculadora de Precios con Plan
             </h1>
             <p className="text-lg text-gray-600">
               Herramienta para promotores de telefonía celular

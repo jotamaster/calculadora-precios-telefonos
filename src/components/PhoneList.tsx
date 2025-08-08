@@ -1,20 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Smartphone, List, Grid, Search } from 'lucide-react';
+import { Smartphone, List, Grid, Search, X } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
 const PhoneList: React.FC = () => {
   const { phoneModels } = useData();
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCompanies, setSelectedCompanies] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
 
-  const filteredPhones = phoneModels.filter(phone =>
-    phone.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Get unique companies from all phones
+  const companies = useMemo(() => {
+    const companySet = new Set<string>();
+    phoneModels.forEach(phone => {
+      phone.operators.forEach(operator => {
+        if (operator.name && operator.name.trim() !== '' && operator.name !== 'OPERADOR') {
+          companySet.add(operator.name);
+        }
+      });
+    });
+    return Array.from(companySet).sort();
+  }, [phoneModels]);
+
+  const filteredPhones = phoneModels.filter(phone => {
+    const matchesSearch = phone.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCompany = selectedCompanies.size === 0 || phone.operators.some(operator => selectedCompanies.has(operator.name));
+    return matchesSearch && matchesCompany;
+  });
 
   const handlePhoneClick = (phoneName: string) => {
     navigate(`/phone/${encodeURIComponent(phoneName)}`);
+  };
+
+  // Function to get company colors
+  const getCompanyColors = (companyName: string) => {
+    const normalizedName = companyName.toUpperCase();
+    switch (normalizedName) {
+      case 'CLARO':
+        return { bg: '#da291c', text: 'white' };
+      case 'ENTEL':
+        return { bg: '#002eff', text: 'white' };
+      case 'WOM':
+        return { bg: '#4d008c', text: 'white' };
+      default:
+        return { bg: '#6b7280', text: 'white' };
+    }
   };
 
   return (
@@ -25,40 +56,78 @@ const PhoneList: React.FC = () => {
         </h1>
         
         {/* Search and View Controls */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Buscar modelo..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 items-center justify-between w-full">
+                         <div className="relative flex-1 max-w-md">
+               <input
+                 type="text"
+                 placeholder="Buscar modelo..."
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+               />
+             </div>
+            
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-lg ${
+                  viewMode === 'list'
+                    ? 'bg-blue-100 text-blue-600'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <List className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg ${
+                  viewMode === 'grid'
+                    ? 'bg-blue-100 text-blue-600'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <Grid className="h-5 w-5" />
+              </button>
+            </div>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded-lg ${
-                viewMode === 'list'
-                  ? 'bg-blue-100 text-blue-600'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              <List className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-lg ${
-                viewMode === 'grid'
-                  ? 'bg-blue-100 text-blue-600'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              <Grid className="h-5 w-5" />
-            </button>
-          </div>
+         
+        </div>
+        <div>
+           {/* Company Filter Chips */}
+           {companies.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {companies.map((company) => (
+                <button
+                  key={company}
+                  onClick={() => {
+                    const newSelected = new Set(selectedCompanies);
+                    if (newSelected.has(company)) {
+                      newSelected.delete(company);
+                    } else {
+                      newSelected.add(company);
+                    }
+                    setSelectedCompanies(newSelected);
+                  }}
+                                     className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                     selectedCompanies.has(company)
+                       ? 'bg-blue-600 text-white'
+                       : `text-white hover:opacity-80`
+                   }`}
+                   style={{
+                     backgroundColor: selectedCompanies.has(company) ? getCompanyColors(company).bg : getCompanyColors(company).bg,
+                     boxShadow: selectedCompanies.has(company) ? '0 0 0 2px #0002' : 'none'
+                   }}
+                >
+                  {company}
+                  {selectedCompanies.has(company) && (
+                    <X className="ml-1 h-2 w-2" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -96,15 +165,18 @@ const PhoneList: React.FC = () => {
                     {phone.name}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    {phone.operators.length} operador{phone.operators.length !== 1 ? 'es' : ''} disponible{phone.operators.length !== 1 ? 's' : ''}
+                    {phone.operators.length} compañía{phone.operators.length !== 1 ? 's' : ''} disponible{phone.operators.length !== 1 ? 's' : ''}
                   </p>
                   
                   {viewMode === 'list' && (
-                    <div className="mt-2 flex flex-wrap gap-1">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {phone.operators.map((operator, index) => (
                         <span
                           key={index}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                          className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium text-white"
+                          style={{
+                            backgroundColor: getCompanyColors(operator.name).bg
+                          }}
                         >
                           {operator.name}
                         </span>
@@ -115,17 +187,20 @@ const PhoneList: React.FC = () => {
                 
                 {viewMode === 'grid' && (
                   <div className="mt-4">
-                    <div className="flex flex-wrap gap-1 justify-center">
+                    <div className="flex flex-wrap gap-2 justify-center">
                       {phone.operators.slice(0, 3).map((operator, index) => (
                         <span
                           key={index}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                          className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium text-white"
+                          style={{
+                            backgroundColor: getCompanyColors(operator.name).bg
+                          }}
                         >
                           {operator.name}
                         </span>
                       ))}
                       {phone.operators.length > 3 && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                        <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
                           +{phone.operators.length - 3} más
                         </span>
                       )}
