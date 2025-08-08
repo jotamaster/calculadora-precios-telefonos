@@ -103,25 +103,29 @@ const PhoneDetail: React.FC = () => {
               <div className="input-with-icon">
                 <span className="icon">$</span>
                 <input
-                  type="text"
+                  type="number"
                   value={basePrice}
                   onChange={(e) => {
                     // Remove all non-numeric characters except decimal point
+                    
+
                     const value = e.target.value.replace(/[^\d.]/g, '');
-                    setBasePrice(value);
+                    setBasePrice(String(value));
                   }}
                   onBlur={(e) => {
-                    // Format as CLP on blur
-                    const numValue = parseFloat(e.target.value.replace(/[^\d.]/g, ''));
-                    if (!isNaN(numValue)) {
-                      const formatted = new Intl.NumberFormat('es-CL', {
-                        style: 'currency',
-                        currency: 'CLP',
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0
-                      }).format(numValue);
+                    // Solo formatear si hay un valor válido
+                    console.log(e.target.value);
+                    const numValue1 = parseFloat(e.target.value.replace(/[^\d.]/g, ''));
+                    const numValue = parseFloat(e.target.value.replace('.', ''));
+                    console.log(numValue);
+                    if (!isNaN(numValue) && numValue > 0) {
+
+                      //formatear solo con miles ejemplo 300 = 300  y 3000 = 3.000 sin la api de numberFormat
+                      const formatted = numValue.toLocaleString('de-DE');
+
                       setBasePrice(formatted);
                     }
+                    // Si no hay valor válido, mantener el valor actual
                   }}
                   placeholder="Ingresa el precio base"
                   className="w-full py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
